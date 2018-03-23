@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://unpkg.com/vue@2.5.16/dist/vue.min.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        body {
+            font-family: BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, "PingFang SC", "Microsoft YaHei", -apple-system;
+            font-size: 2em;
+            font-weight: 200;
+            position: absolute;
+            left: 15em;
+
+        }
+
+        a {
+            color: #444444;
+            text-decoration: none;
+
+        }
+
+        a:hover {
+            color: #3A7734;
+            text-decoration: #3A7734;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <p>{{ message }}({{host}})</p>
+    <ul>
+        <li><a :href=host target="_black">根目录</a></li>
+        <li v-for="a in links">
+            <a :href=host+a target="_blank">{{a}}</a>
+        </li>
+    </ul>
+</div>
+<script>
+
+    new Vue({
+        el: '#app',
+        data: {
+            message: '系统路由导航表',
+            host: 'http://127.0.0.1:5000/',
+
+            links: ["users", "users/singup"
+
+            ]
+        }
+    })
+</script>
+
+
+</body>
+</html>
