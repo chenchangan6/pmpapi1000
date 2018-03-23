@@ -55,6 +55,7 @@ coverage.xml
 local_settings.py
 
 # Flask stuff:
+flask/
 instance/
 .webassets-cache
 
@@ -99,16 +100,3 @@ ENV/
 
 # mypy
 .mypy_cache/
-flask/bin/easy_install
-flask/bin/activate.csh
-flask/bin/activate.fish
-flask/bin/flask
-flask/bin/pip
-flask/bin/easy_install-3.6
-flask/bin/activate
-flask/bin/pip3
-*.6
-flask/bin/python
-flask/bin/python3
-flask/pip-selfcheck.json
-flask/pyvenv.cfg
