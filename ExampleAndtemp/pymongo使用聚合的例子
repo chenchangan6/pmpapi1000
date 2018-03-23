@@ -1,0 +1,36 @@
+pymongo使用聚合的例子：
+
+db.users.find()
+>{ "_id" : ObjectId("5ab4fedbbad7311d33686ec5"), "username" : "cca", "pwd" : "1231231231", "nickname" : "dsfsdafasdfasd" }
+{ "_id" : ObjectId("5ab4ff65d84da91d8a9d7d34"), "username" : "heill2ow", "pwd" : "12312312312", "nickname" : "123123" }
+{ "_id" : ObjectId("5ab5043df8001641e5be1cde"), "username" : "cca", "pwd" : "1231231231", "nickname" : "dsfsdafasdfasd" }
+
+
+
+
+db.users.aggregate( [
+  { $match: { username:"cca"}},
+  { $group: { _id: null, count: { $sum: 1 } } }
+] )
+
+> { "_id" : null, "count" : 2 }
+
+
+
+
+
+
+db.users.aggregate( [ { $group : { _id : "$username" } } ] )
+>{ "_id" : "heill2ow" }
+ { "_id" : "cca" }
+
+
+db.users.aggregate( [ { $group : { _id : "$username",count:{$sum:1} } } ] )
+>{ "_id" : "heill2ow", "count" : 1 }
+ { "_id" : "cca", "count" : 2 }
+
+
+
+db.users.aggregate( [ {$match:{username : "cca"}},{ $group : { _id : "$username",count:{$sum:1} } } ] )
+>{ "_id" : "cca", "count" : 2 }
+

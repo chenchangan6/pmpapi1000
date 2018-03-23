@@ -31,11 +31,11 @@
 <body>
 
 <div id="app">
-    <p>{{ message }}({{host}})</p>
+    <p>{{ message }}({{ host }})</p>
     <ul>
         <li><a :href=host target="_black">根目录</a></li>
         <li v-for="a in links">
-            <a :href=host+a target="_blank">{{a}}</a>
+            <a :href=host+a target="_blank">{{ a }}</a>
         </li>
     </ul>
 </div>
@@ -47,8 +47,9 @@
             message: '系统路由导航表',
             host: 'http://127.0.0.1:5000/',
 
-            links: ["users", "users/singup"
-
+            links: ["users",
+                "users/singup",
+                "users/test"
             ]
         }
     })

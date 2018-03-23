@@ -1,0 +1,16 @@
+系统文档：
+
+安装mongodb:
+
+
+安装好以后，添加管理员账号：
+
+use admin
+
+db.createUser(
+{
+	user:"admin",
+	pwd:"admin",
+	roles: [ { role: "root", db: "admin" } ]
+}
+)

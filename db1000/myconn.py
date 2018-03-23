@@ -96,7 +96,7 @@ def upsert_one(table, data):
         if not my_conn.db[table].find_one(query):
             my_conn.db[table].insert(data)
         else:
-            data.pop('_id')  # ɾ��'_id'��
+            data.pop('_id')  # 删除'_id'键
             my_conn.db[table].update(query, {'$set': data})
     except Exception as e:
         on_error(str(traceback.format_exc(e)))

@@ -2,9 +2,16 @@
 # -*- coding: utf-8 -*-
 from flask_restful import Resource, Api, reqparse
 from . import USERS
-from db1000.myconn import find, insert
+from db1000.myconn import find, insert, find_one, select_colum
 
 ApiBlue = Api(USERS)
+
+
+#
+# def findeuser(valus):
+#     users = find_one("users", valus)
+#
+#     return users
 
 
 # 用来获取用户列表。
@@ -21,6 +28,7 @@ class UserList(Resource):
             return user_list
         except Exception as e:
             return str(e)
+    # def del(self):
 
 
 # 待完善--后面要将用户名和密码参数改为 required = True.
@@ -41,10 +49,26 @@ class UserSingUp(Resource):
         args = parser.parse_args()
         try:
             insert("users", args)
-            return '200'
+            return {'code': '200', 'messages': 'registered successfully'
+                    }
         except Exception as e:
             return str(e)
 
 
+class UserTest(Resource):
+
+    def get(self):
+        readme = "this is Test motheds."
+        return readme
+
+    def post(self):
+        args = parser.parse_args()
+        usersname = {'usersname': args['username']}
+        users = find_one("users", usersname)
+
+        return users
+
+
 ApiBlue.add_resource(UserList, '/')
 ApiBlue.add_resource(UserSingUp, '/singup')
+ApiBlue.add_resource(UserTest, '/test')
