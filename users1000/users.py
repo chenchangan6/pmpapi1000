@@ -7,11 +7,17 @@ from db1000.myconn import find, insert, find_one, select_colum
 ApiBlue = Api(USERS)
 
 
-#
-# def findeuser(valus):
-#     users = find_one("users", valus)
-#
-#     return users
+# 检查是否存在，用户名或者昵称：例如：tables='users',values= {'username': 'cca'},filed='username'
+def findeuser(tables, valus, filed):
+    res = select_colum(tables, valus, filed)
+
+    resoult = []
+    for k in res:
+        k.pop("_id")
+        resoult.append(k)
+    resoult.append({'len': len(resoult)})
+
+    return resoult
 
 
 # 用来获取用户列表。
@@ -48,9 +54,13 @@ class UserSingUp(Resource):
     def post(self):
         args = parser.parse_args()
         try:
-            insert("users", args)
-            return {'code': '200', 'messages': 'registered successfully'
-                    }
+
+            haveauser = findeuser("users", {'username': args['username']}, 'username')
+            if haveauser[-1]['len'] == 0:
+                insert("users", args)
+                return {'code': '200', 'messages': 'registered successfully'
+                        }
+            return {'code': '404', 'messages': 'user is registerd'}
         except Exception as e:
             return str(e)
 
@@ -58,6 +68,7 @@ class UserSingUp(Resource):
 class UserTest(Resource):
 
     def get(self):
+
         readme = "this is Test motheds."
         return readme
 
