@@ -1,6 +1,6 @@
 # pmpapi1000
 
-## 技术栈:
+### 技术栈:
 
 python3 -m venv flask
 
@@ -12,20 +12,20 @@ pip3 install flask-restful
 
 pip3 install pymongo
 
-#----------------------------------------
+# -----------------------------------------------------------------------------
 
-#当前版本：mongodb 3.6.3
+#### 当前版本：mongodb 3.6.3
 
-##安装mongodb:
+#### 安装mongodb:
 https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/#install-mongodb-community-edition
 
 
 
-##配置3.6
+### 配置3.6
 
 http://blog.51cto.com/13598811/2083092
 
-##安装好以后，添加管理员账号：
+### 安装好以后，添加管理员账号：
 
 use admin
 
@@ -38,7 +38,7 @@ db.createUser(
 )
 
 
-##添加测试数据库及数据库用户：
+### 添加测试数据库及数据库用户：
 
 use testdb
 
@@ -51,11 +51,11 @@ db.createUser(
 )
 
 
-##编辑远程连接配置：
+### 编辑远程连接配置：
 
 vim /etc/mongod.conf
 
-##修改内容：
+### 修改内容：
 
  network interfaces
 net:
