@@ -25,7 +25,7 @@ https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/#install-mong
 
 http://blog.51cto.com/13598811/2083092
 
-### 安装好以后，添加管理员账号：
+#### 安装好以后，添加管理员账号：
 
 use admin
 
