@@ -3,7 +3,10 @@
 import pymongo
 import traceback
 from config1000.configs import MONGODB_CONFIG
-
+# 本方法中，为了使用方便进行了去ID改造，
+# 即从MONGODB返回的数据没有带ID这个字段（因为ID字段是OBJECT类型，需要单独处理，而且本例中基本上用不到ID）
+# 去掉的方法是，在 FIND({},{"_id":0})).
+# 凡是这样的写法的都是已经去掉自动返回ID的。
 
 class Singleton(object):
     # 单例模式写法,参考：http://ghostfromheaven.iteye.com/blog/1562618
@@ -115,6 +118,7 @@ def find_one(table, value):
 def find(table, value):
     # 根据条件进行查询，返回所有记录
     try:
+
         my_conn = MongoConn()
         check_connected(my_conn)
         return my_conn.db[table].find(value)
@@ -122,11 +126,46 @@ def find(table, value):
         on_error(str(traceback.format_exc(e)))
 
 
+def find_desc(table, field):
+    # 根据条件进行查询，返回所有记录（已经去掉id）并（倒序），此方法为 find方法的扩展.sort用法。
+    # table 传集合的名称，field 传 倒序字段的名称。
+    # 例如：userlist = find_desc("users", "_id")，返回一个倒序的Josn集合（注意：包含ID为Object类型）
+    # 返回对象使用时需要:
+    # user_list = []
+    # userlist = find_desc("users", "_id")
+    # for x in userlist:
+    #     x.pop("_id")
+    #     user_list.append(x)
+    # return user_list
+    try:
+
+        my_conn = MongoConn()
+        check_connected(my_conn)
+        return my_conn.db[table].find({}, {'_id': 0}).sort(field, pymongo.DESCENDING)
+    except Exception as e:
+        on_error(str(traceback.format_exc(e)))
+
+
 def select_colum(table, value, colum):
-    # 查询指定列的所有值
+    # 查询指定列的所有值（已经去掉id）,例如：
+    # selct_colum("users", {'username': args['username']}, 'username')
+    # 相当于给数据库发送指令 db.users.find({username:'cca'},{username:1})
+    # 返回结果过为：
+    # { "_id" : ObjectId("5ab4fedbbad7311d33686ec5"), "username" : "cca" }
+    # { "_id" : ObjectId("5ab5043df8001641e5be1cde"), "username" : "cca" }
     try:
         my_conn = MongoConn()
         check_connected(my_conn)
-        return my_conn.db[table].find(value, {colum: 1})
+        return my_conn.db[table].find(value, {colum: 1, '_id': 0})
+    except Exception as e:
+        on_error(str(traceback.format_exc(e)))
+
+
+def delete_many(table, value):
+    # 删除指定条件的所有的条目
+    try:
+        my_conn = MongoConn()
+        check_connected(my_conn)
+        return my_conn.db[table].delete_many(value)
     except Exception as e:
         on_error(str(traceback.format_exc(e)))
