@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from flask_restful import Resource, Api, reqparse
 from . import USERS
-from db1000.myconn import find_desc, insert, find_one, select_colum, delete_many
+from db1000.myconn import find_desc, insert, select_colum, delete_many
 
 ApiBlue = Api(USERS)
 
@@ -63,7 +63,6 @@ class UserDelete(Resource):
 
 # 用户注册
 class UserSingUp(Resource):
-
     def get(self):
         mothoed_reademe = "this is users sing-up mothed."
         return mothoed_reademe
@@ -98,4 +97,3 @@ ApiBlue.add_resource(UserList, '/')
 ApiBlue.add_resource(UserSingUp, '/singup')
 ApiBlue.add_resource(UserDelete, '/delete')
 ApiBlue.add_resource(UserTest, '/test')
-
