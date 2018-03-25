@@ -4,7 +4,26 @@
 
 安装mongodb:
 https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/#install-mongodb-community-edition
+--------------------------------------------------------------------------------------------------------------
+使用DOCKER做为Mongodb服务器
+测试服务器IP 18*.**.***.121 百度云
 
+引用镜像：https://c.163yun.com/hub#/m/repository/?repoId=3029
+
+修改后的镜像Docker 镜像为： mongo
+
+
+启动服务器：
+
+mkdir -p /data/db
+
+
+docker exec -it pmpmongotest mongo admin
+
+
+docker run -p 27017:27017 --name pmpmongotest -v /data/db:/data/db -d mongo
+
+-------------------------------------------------------------------------------------------------------------------
 
 
 配置3.6
@@ -17,12 +36,11 @@ use admin
 
 db.createUser(
 {
-	user:"admin",
-	pwd:"admin",
-	roles: [ { role: "root", db: "admin" } ]
+ user: 'admin',
+ pwd: 'pmptikutest',
+ roles: [ { role: "userAdminAnyDatabase", db: "admin" } ] 
 }
 )
-
 
 添加测试数据库及数据库用户：
 
@@ -35,6 +53,10 @@ db.createUser(
     roles: [ { role: "readWrite", db: "testdb" } ]
 }
 )
+
+
+
+
 
 
 编辑远程连接配置：
