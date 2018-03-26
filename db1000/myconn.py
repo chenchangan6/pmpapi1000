@@ -3,6 +3,8 @@
 import pymongo
 import traceback
 from config1000.configs import MONGODB_CONFIG
+
+
 # 本方法中，为了使用方便进行了去ID改造，
 # 即从MONGODB返回的数据没有带ID这个字段（因为ID字段是OBJECT类型，需要单独处理，而且本例中基本上用不到ID）
 # 去掉的方法是，在 FIND({},{"_id":0})).
@@ -146,17 +148,29 @@ def find_desc(table, field):
         on_error(str(traceback.format_exc(e)))
 
 
-def select_colum(table, value, colum):
-    # 查询指定列的所有值（已经去掉id）,例如：
+def select_colum(table, value, *colum):
+    # 查询指定列的所有值（已经去掉id），table为集合名称，value是查询条件，*colum为想显示的列的名称,*colum可以为多个列名，
+    # 例如：
     # selct_colum("users", {'username': args['username']}, 'username')
     # 相当于给数据库发送指令 db.users.find({username:'cca'},{username:1})
-    # 返回结果过为：
     # { "_id" : ObjectId("5ab4fedbbad7311d33686ec5"), "username" : "cca" }
     # { "_id" : ObjectId("5ab5043df8001641e5be1cde"), "username" : "cca" }
+    # 如果需要查询用户名和密码,添加为username:cca，显示username和pwd两列。
+    # selct_colum("users", {'username': args['username']}, 'username','pwd')
+    # 相当于给数据库发送指令 db.users.find({username:'cca'},{username:1,pwd:1})
+    # 返回结果过为：
+    # { "_id" : ObjectId("5ab4fedbbad7311d33686ec5"), "username" : "cca","pwd":"123" }
+    # { "_id" : ObjectId("5ab5043df8001641e5be1cde"), "username" : "cca","pwd":"123" }
     try:
         my_conn = MongoConn()
         check_connected(my_conn)
-        return my_conn.db[table].find(value, {colum: 1, '_id': 0})
+        showfileds = {}
+        for filed in colum[0]:
+            showfileds[filed] = 1
+        showfileds['_id'] = 0
+
+        return my_conn.db[table].find(value, showfileds)
+        # return my_conn.db[table].find(value, {colum[0][0]: 1, '_id': 0})
     except Exception as e:
         on_error(str(traceback.format_exc(e)))
 
