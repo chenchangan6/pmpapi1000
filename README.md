@@ -12,6 +12,8 @@ pip3 install flask-restful
 
 pip3 install pymongo
 
+pip3 install passlib
+
 #### -----------------------------------------------------------------------------
 
 #### 当前版本：mongodb 3.6.3
