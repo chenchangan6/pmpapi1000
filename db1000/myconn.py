@@ -1,8 +1,10 @@
 #!flask/bin/python3
 # -*- coding: utf-8 -*-
+# -*- author: Charles Chen
 import pymongo
 import traceback
 from config1000.configs import MONGODB_CONFIG
+
 
 
 # 本方法中，为了使用方便进行了去ID改造，

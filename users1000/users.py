@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 from flask_restful import Resource, Api, reqparse
 from . import USERS
+from config1000.configs import USERPASSWORD_CONFIG
 from db1000.myconn import find_desc, insert, select_colum, delete_many
 from passlib.apps import custom_app_context
+from itsdangerous import TimedJSONWebSignatureSerializer as TJWSS, SignatureExpired, BadSignature
 
 ApiBlue = Api(USERS)
 
@@ -26,16 +28,34 @@ def findeuser(tables, valus, *filed):
 
 
 # 用户密码加密。
-def hashpassword(valule):
-    valule += 'pmptiku.com'  # 加盐 pmptiku.com
-    hashpassworldvalue = custom_app_context.encrypt(valule)
+def hashpassword(value):
+    value += USERPASSWORD_CONFIG['hashpasswordaddsalt']  # 加盐
+    hashpassworldvalue = custom_app_context.encrypt(value)
     return hashpassworldvalue
 
 
 # 验证密码 说明：userpassword 输入为用户提交的明文密码。dbpassword为从数据库获取到的加密后的密码。
 def verify_password(userpassword, dbpassword):
-    userpassword += 'pmptiku.com'  # 原密码加密的过程已经进行加盐，所以对比的时候要先加盐。
+    userpassword += USERPASSWORD_CONFIG['hashpasswordaddsalt']  # 原密码加密的过程已经进行加盐，所以对比的时候要先加盐。
     return custom_app_context.verify(userpassword, dbpassword)
+
+
+# 生成token,注value 应为JSON格式。本例会将value进行加密。
+def generate_token(value):
+    token = TJWSS(USERPASSWORD_CONFIG['tokensecretkey'], expires_in=USERPASSWORD_CONFIG['tokenexpiration'])
+    return token.dumps(value)
+
+
+# 验证token,如果正确则返回解密后的token信息，如果超时，则提示，超时。如果被篡改就提示无效的token。
+def verify_token(value):
+    token = TJWSS(USERPASSWORD_CONFIG['tokensecretkey'])
+    try:
+        data = token.loads(value)
+    except SignatureExpired:
+        return 'valid token, but expired'
+    except BadSignature:
+        return 'invalid token'
+    return data
 
 
 # 获取用户列表。
@@ -123,10 +143,22 @@ class UserlogIn(Resource):
 
 # 临时测试项目
 class UserTest(Resource):
-
     def get(self):
-        readme = 'this is Test motheds.'
-        return readme
+        parser = reqparse.RequestParser()
+        parser.add_argument('username')
+        parser.add_argument('pwd')
+        args = parser.parse_args()
+        token = generate_token({'username': args['username'], 'pwd': args['pwd']})
+        return token.decode('ascii')
+        # readme = 'this is Test motheds.'
+        # return readme
+
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('token')
+        args = parser.parse_args()
+        verifytoken = verify_token(args['token'])
+        return verifytoken
 
 
 ApiBlue.add_resource(UserList, '/')
