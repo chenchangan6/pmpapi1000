@@ -1,4 +1,4 @@
-#!flask/bin/python3
+#!flask/bin/python3.6
 # -*- coding: utf-8 -*-
 # -*- author: Charles Chen
 import pymongo

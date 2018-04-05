@@ -1,4 +1,4 @@
-#!flask/bin/python3
+#!flask/bin/python3.6
 # -*- coding: utf-8 -*-
 from flask_restful import Resource, Api, reqparse
 from . import USERS

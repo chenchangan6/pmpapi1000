@@ -1,4 +1,4 @@
-#!flask/bin/python3
+#!flask/bin/python3.6
 # -*- coding: utf-8 -*-
 # -*- author: Charles Chen
 # 程序运行环境，如果是开发环境，Dev = True，如果是生产环境，Dev = False
