@@ -1,7 +1,7 @@
 ## pmpapi1000
 
 #### 技术栈:
-
+'''
 python3 -m venv flask
 
 source flask/bin/activate
@@ -13,7 +13,7 @@ pip3 install flask-restful
 pip3 install pymongo
 
 pip3 install passlib
-
+'''
 #### -----------------------------------------------------------------------------
 
 #### 当前版本：mongodb 3.6.3
