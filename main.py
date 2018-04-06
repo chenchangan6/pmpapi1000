@@ -3,9 +3,11 @@
 from flask import Flask, Blueprint
 from flask_restful import Resource, Api
 from users1000.users import USERS
+from flask_cors import CORS
 import random
 
 app = Flask(__name__)
+CORS(app)
 INDEX = Blueprint('index', __name__)
 ApiBlue = Api(INDEX)
 
