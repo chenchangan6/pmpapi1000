@@ -6,7 +6,6 @@ import traceback
 from config1000.configs import MONGODB_CONFIG
 
 
-
 # 本方法中，为了使用方便进行了去ID改造，
 # 即从MONGODB返回的数据没有带ID这个字段（因为ID字段是OBJECT类型，需要单独处理，而且本例中基本上用不到ID）
 # 去掉的方法是，在 FIND({},{"_id":0})).
