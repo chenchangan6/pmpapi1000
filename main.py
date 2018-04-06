@@ -20,6 +20,6 @@ class HelloWorld(Resource):
 
 ApiBlue.add_resource(HelloWorld, '/')
 app.register_blueprint(INDEX, url_prefix='/')
-app.register_blueprint(USERS, url_prefix='/users/')
+app.register_blueprint(USERS, url_prefix='/users')
 if __name__ == '__main__':
     app.run(debug=True)
