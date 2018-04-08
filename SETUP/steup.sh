@@ -86,7 +86,7 @@ cd /var/www/pmpapi1000
 virtualenv flask
 source flask/bin/activate
 
-#7.安装技术栈
+#8.安装技术栈
 echo -e "\e[31;47m**********English:   [(SETP:8)] install pyton package **********\e[0m"
 echo -e "\e[31;47m**********Chinese:   [(步骤:8)]  安装技术栈**********\e[0m"
 pip install flask
@@ -95,16 +95,16 @@ pip install flask-cors
 pip install pymongo
 pip install passlib
 
-#8.安装gunicorn
+#9.安装gunicorn
 echo -e "\e[31;47m**********English:   [(SETP:9)] install gunicorn **********\e[0m"
 echo -e "\e[31;47m**********Chinese:   [(步骤:9)]  安装gunicorn**********\e[0m"
 pip install gunicorn
 
-#9.运行gunicorn
+#10.运行gunicorn
 echo -e "\e[31;47m**********English:   [(SETP:10)] running gunicorn **********\e[0m"
 echo -e "\e[31;47m**********Chinese:   [(步骤:10)]  运行gunicorn**********\e[0m"
 touch /var/www/pmpapi1000/LOG1000/gunicorn.error.log
-gunicorn main:app -c /var/www/pmpapi1000/config1000/gunicorn.conf.py
+gunicorn -D main:app -c /var/www/pmpapi1000/config1000/gunicorn.conf.py
 
 
 
