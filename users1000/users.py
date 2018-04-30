@@ -109,6 +109,9 @@ class UserSingUp(Resource):
         parser.add_argument('pwd', required=True, location='json')
         parser.add_argument('nickname', required=True, location='json')
         args = parser.parse_args()
+        if args['username'] == "" or args['pwd'] == "":
+            return {'code': '000', 'messages': 'username or pwd is null'}
+
         try:
 
             haveauser = findeuser("users", {'username': args['username']}, 'username')
@@ -133,6 +136,8 @@ class UserlogIn(Resource):
         parser.add_argument('username', required=True, location='json')
         parser.add_argument('pwd', required=True, location='json')
         args = parser.parse_args()
+        if args['username'] == "" or args['pwd'] == "":
+            return {'code': '000', 'messages': 'username or pwd is null'}
         haveauser = findeuser("users", {'username': args['username']}, 'username', 'pwd')
         if haveauser[-1]['len'] != 0:
             if verify_password(args['pwd'], haveauser[0]['pwd']):
