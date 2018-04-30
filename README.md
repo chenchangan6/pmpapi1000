@@ -34,8 +34,8 @@ use admin
 
 db.createUser(
 {
-	user:"admin",
-	pwd:"admin",
+	user:"adminPmptiku",
+	pwd:"adminPmptiku##!",
 	roles: [ { role: "root", db: "admin" } ]
 }
 )
@@ -44,13 +44,13 @@ db.createUser(
 #### 添加测试数据库及数据库用户：
 
 ```
-use testdb
+use pmpDB
 
 db.createUser(
 {
-    user: "pmptikutest",
-    pwd: "123456",
-    roles: [ { role: "readWrite", db: "testdb" } ]
+    user: "pmptikuadmin",
+    pwd: "pmptiku##!",
+    roles: [ { role: "readWrite", db: "pmpDB" } ]
 }
 )
 ```
