@@ -93,17 +93,27 @@ def upsert_mary(table, datas):
         on_error(str(traceback.format_exc(e)))
 
 
-def upsert_one(table, data):
-    # 更新插入，根据‘_id’更新一条记录，如果‘_id’的值不存在，则插入一条记录
+# def upsert_one(table, data):
+#     # 更新插入，根据‘_id’更新一条记录，如果‘_id’的值不存在，则插入一条记录
+#     try:
+#         my_conn = MongoConn()
+#         check_connected(my_conn)
+#         query = {'_id': data.get}
+#         if not my_conn.db[table].find_one(query):
+#             my_conn.db[table].insert(data)
+#         else:
+#             data.pop('_id')  # 删除'_id'键
+#             my_conn.db[table].update(query, {'$set': data})
+#     except Exception as e:
+#         on_error(str(traceback.format_exc(e)))
+
+def upsert_one(table, query, data):
+    # query为查询条件，如：query={'_id': data.get},注：query必须为一个JSON
+    # 更新插入一条数据，例如:根据‘_id’更新一条记录，如果‘_id’的值不存在，则插入一条记录
     try:
         my_conn = MongoConn()
         check_connected(my_conn)
-        query = {'_id': data.get}
-        if not my_conn.db[table].find_one(query):
-            my_conn.db[table].insert(data)
-        else:
-            data.pop('_id')  # 删除'_id'键
-            my_conn.db[table].update(query, {'$set': data})
+        my_conn.db[table].update_one(query, {'$set': data}, upsert=True)
     except Exception as e:
         on_error(str(traceback.format_exc(e)))
 
