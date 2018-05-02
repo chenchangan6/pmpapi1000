@@ -224,14 +224,14 @@ class UserTest(Resource):
     decorators = [authmulti.login_required]
 
     def get(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('username', required=True)
-        parser.add_argument('pwd', required=True)
-        args = parser.parse_args()
-        token = generate_token(args)
-        return token.decode('acsii')
-        # readme = 'this is Test methods.'
-        # return readme
+        # parser = reqparse.RequestParser()
+        # parser.add_argument('username', required=True)
+        # parser.add_argument('pwd', required=True)
+        # args = parser.parse_args()
+        # token = generate_token(args)
+        # return token.decode('acsii')
+        readme = 'this is Test methods.'
+        return readme
 
     def post(self):
         # 验证token
