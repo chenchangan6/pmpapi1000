@@ -23,7 +23,7 @@ USERPASSWORD_CONFIG = {
 
     'hashpasswordaddsalt': 'pmptiku.com',
     'tokensecretkey': 'token@pmptiku.com',
-    'tokenexpiration': 60
+    'tokenexpiration': 1*24
 
 }
 
