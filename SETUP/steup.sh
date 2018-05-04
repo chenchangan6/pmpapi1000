@@ -25,7 +25,7 @@ sudo apt-get -y install software-properties-common
 
 #2.2添加python3.6地址,并更新地址库
 echo -e "\e[31;47m**********Chinese:   [(步骤:2.2)]  添加python3.6地址,并更新地址库 **********\e[0m"
-sudo add-apt-repository ppa:jonathonf/python-3.6 -y
+sudo add-apt-repository ppa:deadsnakes/ppa -y
 sudo apt-get update
 
 #2.3安装python3.6
@@ -92,6 +92,7 @@ echo -e "\e[31;47m**********Chinese:   [(步骤:8)]  安装技术栈**********\e
 pip install flask
 pip install flask-restful
 pip install flask-cors
+pip install flask-HTTPauth
 pip install pymongo
 pip install passlib
 
@@ -105,18 +106,3 @@ echo -e "\e[31;47m**********English:   [(SETP:10)] running gunicorn **********\e
 echo -e "\e[31;47m**********Chinese:   [(步骤:10)]  运行gunicorn**********\e[0m"
 touch /var/www/pmpapi1000/LOG1000/gunicorn.error.log
 gunicorn -D main:app -c /var/www/pmpapi1000/config1000/gunicorn.conf.py
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
