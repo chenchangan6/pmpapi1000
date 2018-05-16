@@ -94,6 +94,7 @@ pip install flask-restful
 pip install flask-cors
 pip install pymongo
 pip install passlib
+pip install qcloudsms_py
 
 #9.安装gunicorn
 echo -e "\e[31;47m**********English:   [(SETP:9)] install gunicorn **********\e[0m"

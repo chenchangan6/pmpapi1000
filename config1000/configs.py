@@ -18,12 +18,20 @@ MONGODB_CONFIG = {
     'password': '123456'
 }
 
-# 关于用户密码加密的设置。tokenexpiration单位为秒
+# 关于用户密码加密的设置。tokenexpiration单位为秒，设置的TOKEN过期时间
 USERPASSWORD_CONFIG = {
 
     'hashpasswordaddsalt': 'pmptiku.com',
     'tokensecretkey': 'token@pmptiku.com',
-    'tokenexpiration': 1*24
+    'tokenexpiration': 1 * 24
+
+}
+# 用户手机验证码过期时间，单位为分钟。
+USERVERIFYCODE_CONFIG = {
+    'appid': 1400092769,
+    'appkey': '7b66a09ffdf112caf9150642ed555031',
+    'template_id': 121466,
+    'expirtime': 5
 
 }
 

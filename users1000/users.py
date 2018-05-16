@@ -3,11 +3,14 @@
 from flask_restful import Resource, Api, reqparse
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth, MultiAuth
 from . import USERS
-from config1000.configs import USERPASSWORD_CONFIG
+from config1000.configs import USERPASSWORD_CONFIG, USERVERIFYCODE_CONFIG
 from db1000.myconn import find_desc, insert, select_colum, delete_many, upsert_one
 from passlib.apps import custom_app_context
 from itsdangerous import TimedJSONWebSignatureSerializer as TJWSS, SignatureExpired, BadSignature
+from message1000.mobileverifycode import sing_sender
 import datetime
+import random
+import time
 
 ApiBlue = Api(USERS)
 
@@ -19,6 +22,23 @@ ApiBlue = Api(USERS)
 def get_now():
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return now
+
+
+# 时间差
+# 时间a减去时间b，获得二者的时间差,参数为时间字符串，例如：2017-03-30 16:54:01.660
+def get_time_diff(timestra, timestrb):
+    if timestra <= timestrb:
+        return 0
+    ta = time.strptime(timestra, "%Y-%m-%d %H:%M:%S")
+    tb = time.strptime(timestrb, "%Y-%m-%d %H:%M:%S")
+    y, m, d, H, M, S = ta[0:6]
+    datatimea = datetime.datetime(y, m, d, H, M, S)
+    y, m, d, H, M, S = tb[0:6]
+    datatimeb = datetime.datetime(y, m, d, H, M, S)
+    secondsdiff = (datatimea - datatimeb).seconds
+    # 两者相加得转换成分钟的时间差
+    minutesdiff = round(secondsdiff / 60, 1)
+    return minutesdiff
 
 
 # 添加token和登录历史
@@ -218,30 +238,83 @@ class UserlogIn(Resource):
         return {'code': '404', 'messages': 'The user dos not exist'}  # 用户名错误,用户不存在
 
 
+# 用户手机验证码
+class UserPhoneVerificationcode(Resource):
+
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('phonenumber')
+        parser.add_argument('phoneverifycode', type=int)
+        args = parser.parse_args()
+        try:
+            if len(str(int(args['phonenumber']))) != 11:
+                return {'code': '400', 'messages': 'Must be a mobile number.'}  # 手机号码验证
+            if len(str(int(args['phoneverifycode']))) != 6:
+                return {'code': '400', 'messages': 'Must be 6 numbers.'}  # 验证码是6位数字
+        except Exception as e:
+            return {'code': '400', 'messages': 'error.', 'error': e}
+        try:
+            haveauser = findeuser('verifycode',
+                                  {'phonenumber': args['phonenumber'], 'verifycode': args['phoneverifycode']},
+                                  'createdate')
+            # 没有该用户的验证码
+            if haveauser[-1]['len'] == 0:
+                return {'code': '400', 'message': 'verifycode error'}
+            # 验证码过期
+            if get_time_diff(get_now(), haveauser[0]['createdate']) > USERVERIFYCODE_CONFIG['expirtime']:
+                return {'code': '401', 'message': 'verifycode expire'}
+            return {'code': '200', 'message': 'verifycode right'}
+        except Exception as e:
+            return {'code': '400', 'messages': 'error.', 'error': e}
+
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('phonenumber')
+        args = parser.parse_args()
+        try:
+            if len(str(int(args['phonenumber']))) != 11:
+                return {'code': '400', 'messages': 'Must be a mobile number.'}  # 手机号码验证
+        except Exception as e:
+            return {'code': '400', 'messages': 'Must be a mobile number.', 'error': e}
+        try:
+            verifycode = random.randint(100000, 900000)
+            upsert_one('verifycode', {'phonenumber': args['phonenumber']},
+                       {'phonenumber': args['phonenumber'], 'verifycode': verifycode, 'createdate': get_now()})
+            result = sing_sender(args['phonenumber'], verifycode)
+            return {'code': '200', 'messages': 'The verifycode sended to ' + args['phonenumber']}
+        except Exception as e:
+            return {'code': '500', 'messages': 'have a error', 'error': e}
+
+
 # 临时测试项目
 class UserTest(Resource):
     # 装饰器，登录验证
-    decorators = [authmulti.login_required]
+    # decorators = [authmulti.login_required]
 
     def get(self):
-        # parser = reqparse.RequestParser()
-        # parser.add_argument('username', required=True)
-        # parser.add_argument('pwd', required=True)
-        # args = parser.parse_args()
-        # token = generate_token(args)
-        # return token.decode('acsii')
-        readme = 'this is Test methods.'
-        return readme
-
-    def post(self):
-        # 验证token
         parser = reqparse.RequestParser()
-        parser.add_argument('token')
+        parser.add_argument('phonenumber')
         args = parser.parse_args()
-        verifytoken = userverify_token(args['token'])
-        return verifytoken
+        try:
+            user_list = []
+            userlist = find_desc("verifycode", "_id")
+            for x in userlist:
+                user_list.append(x)
+            return user_list
+        except Exception as e:
+            return str(e)
 
 
+def post(self):
+    # 验证token
+    parser = reqparse.RequestParser()
+    parser.add_argument('token')
+    args = parser.parse_args()
+    verifytoken = userverify_token(args['token'])
+    return verifytoken
+
+
+ApiBlue.add_resource(UserPhoneVerificationcode, '/verifycode')
 ApiBlue.add_resource(UserList, '/')
 ApiBlue.add_resource(UserSingUp, '/singup')
 ApiBlue.add_resource(UserlogIn, '/login')
