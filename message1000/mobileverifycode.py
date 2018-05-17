@@ -10,12 +10,13 @@ def sing_sender(phone_number, verifycode):
     appid = USERVERIFYCODE_CONFIG['appid']
     appkey = USERVERIFYCODE_CONFIG['appkey']
     template_id = USERVERIFYCODE_CONFIG['template_id']
-    ssender = SmsSingleSender(appid, appkey)
     params = [str(verifycode), str(USERVERIFYCODE_CONFIG['expirtime'])]
+    ssender = SmsSingleSender(appid, appkey)
     try:
-        result = ssender.send(0, 86, phone_number, template_id, params)
+        result = ssender.send(0, 86, str(phone_number), "您的验证码是：" + str(verifycode) + "，请于" + str(
+            USERVERIFYCODE_CONFIG['expirtime']) + "分钟内填写。如非本人操作，请忽略本短信。")
         return result
     except HTTPError as e:
-        return {'code': '500', 'message': 'HTTPError.', 'error': e}
+        return e
     except Exception as e:
-        return {'code': '500', 'message': 'SendError.', 'error': e}
+        return e
