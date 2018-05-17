@@ -30,11 +30,12 @@ RUN pip install virtualenv
 
 
 RUN mkdir -p /var/www/pmpapi1000
-RUN wget -c -P /var/www/ https://github.com/chenchangan6/pmpapi1000/archive/master.zip
-RUN unzip /var/www/master.zip -d /var/www/
+RUN wget -c -P /var/www/ https://github.com/chenchangan6/pmpapi1000/archive/master.zip?1
+RUN ls /var/www/
+RUN unzip /var/www/master.zip?1 -d /var/www/
 RUN mv /var/www/pmpapi1000-master/* /var/www/pmpapi1000/
 RUN rm -rf /var/www/pmpapi1000-master
-RUN rm -f /var/www/master.zip
+RUN rm -f /var/www/master.zip?1
 
 RUN apt-get -y install nginx
 RUN rm -f /etc/nginx/sites-enabled/default
@@ -43,7 +44,7 @@ RUN service nginx restart
 
 
 RUN virtualenv /var/www/pmpapi1000/flask
-RUN bash /var/www/pmpaip1000/SETUP/Dockersetupapi.sh
+RUN bash /var/www/pmpapi1000/SETUP/Dockersetupapi.sh
 RUN bash /var/www/pmpapi1000/Patch1000/Patch1000.sh
 CMD bash /var/www/pmpapi1000/SETUP/run.sh
 
