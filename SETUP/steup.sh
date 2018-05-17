@@ -96,6 +96,10 @@ pip install flask-HTTPauth
 pip install pymongo
 pip install passlib
 pip install qcloudsms_py
+#8.1安装补丁
+echo -e "\e[31;47m**********English:   [(SETP:8)] install patch **********\e[0m"
+echo -e "\e[31;47m**********Chinese:   [(步骤:8)]  安装补丁（替换现有文件为自行修改过的系统文件）**********\e[0m"
+bash /var/www/pmpapi1000/Patch1000/Patch1000.sh
 
 #9.安装gunicorn
 echo -e "\e[31;47m**********English:   [(SETP:9)] install gunicorn **********\e[0m"
