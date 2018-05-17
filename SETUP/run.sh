@@ -7,6 +7,6 @@ source /var/www/pmpapi1000/flask/bin/activate
 
 cd /var/www/pmpapi1000/
 
-gunicorn -D main:app -c /var/www/pmpapi1000/config1000/gunicorn.conf.py
+gunicorn main:app -c /var/www/pmpapi1000/config1000/gunicorn.conf.py
 
 
