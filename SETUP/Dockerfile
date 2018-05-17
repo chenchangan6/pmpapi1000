@@ -45,6 +45,7 @@ RUN service nginx restart
 RUN virtualenv /var/www/pmpapi1000/flask
 RUN bash /var/www/pmpaip1000/SETUP/Dockersetupapi.sh
 RUN bash /var/www/pmpapi1000/Patch1000/Patch1000.sh
+CMD bash /var/www/pmpapi1000/SETUP/run.sh
 
 
 
