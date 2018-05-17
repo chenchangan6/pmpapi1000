@@ -281,7 +281,7 @@ class UserPhoneVerificationcode(Resource):
             upsert_one('verifycode', {'phonenumber': args['phonenumber']},
                        {'phonenumber': args['phonenumber'], 'verifycode': verifycode, 'createdate': get_now()})
             result = sing_sender(args['phonenumber'], verifycode)
-            return {'code': '200', 'messages': 'The verifycode sended to ' + args['phonenumber']}
+            return {'code': '200', 'result': result, 'messages': 'The verifycode sended to ' + args['phonenumber']}
         except Exception as e:
             return {'code': '500', 'messages': 'have a error', 'error': e}
 
@@ -304,16 +304,21 @@ class UserTest(Resource):
         except Exception as e:
             return str(e)
 
+    def post(self):
+        # 验证token
+        parser = reqparse.RequestParser()
+        parser.add_argument('token')
+        args = parser.parse_args()
+        verifytoken = userverify_token(args['token'])
+        return verifytoken
 
-def post(self):
-    # 验证token
-    parser = reqparse.RequestParser()
-    parser.add_argument('token')
-    args = parser.parse_args()
-    verifytoken = userverify_token(args['token'])
-    return verifytoken
+
+class Test(Resource):
+    def get(self):
+        return {'nihao': 'ok'}
 
 
+ApiBlue.add_resource(Test, '/test')
 ApiBlue.add_resource(UserPhoneVerificationcode, '/verifycode')
 ApiBlue.add_resource(UserList, '/')
 ApiBlue.add_resource(UserSingUp, '/singup')
