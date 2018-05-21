@@ -186,7 +186,7 @@ class UserSingUp(Resource):
         parser.add_argument('nickname', required=True, location='json')
         parser.add_argument('createdate', default=get_now(), location='json')
         args = parser.parse_args()
-        if args['username'] == "" or args['pwd'] == "":
+        if args['username'] == "" or args['pwd'] == "" or args['nickname'] == "":
             return {'code': '000', 'messages': 'username or pwd is null'}  # 用户名或密码为空
         try:
             if len(str(int(args['username']))) != 11:
@@ -197,6 +197,10 @@ class UserSingUp(Resource):
         pwdlength = len(args['pwd'])
         if pwdlength < 6 or pwdlength > 20:
             return {'code': '400', 'messages': 'The pwd length must be between 6 and 20.'}  # 密码长度验证
+
+        nicknamelength = len(args['nickname'])
+        if nicknamelength < 6 or pwdlength > 20:
+            return {'code': '400', 'messages': 'The nickname length must be between 6 and 20.'}  # 昵称长度验证
 
         try:
 
